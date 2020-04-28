@@ -8,12 +8,19 @@
 package main
 
 import (
-	"fmt"
 	. "go-example/models/config"
+	"go-example/routers"
+	"log"
 )
 
 func main() {
+	// 配置文件预览
 	Config.Print()
 
-	fmt.Println("hello world.")
+	// 启动 Http Server
+	if err := routers.App.Run(); err != nil {
+		log.Fatalln(err.Error())
+	}
+
+	log.Println("hello world.")
 }
