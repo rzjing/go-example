@@ -8,6 +8,10 @@
 package config
 
 type base struct {
-	Name string `yml:"name"`
-	Logs string `yml:"logs"`
+	Name string `yaml:"name"`
+	Logs string `yaml:"logs"`
+}
+
+type mysql struct {
+	Uri string `yaml:"uri"`
 }

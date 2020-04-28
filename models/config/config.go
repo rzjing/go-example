@@ -17,7 +17,8 @@ import (
 )
 
 type config struct {
-	Base base
+	Base  base  `yaml:"Base"`
+	Mysql mysql `yaml:"Mysql"`
 }
 
 func (c *config) Print() {
@@ -31,15 +32,15 @@ func (c *config) Print() {
 var Config *config
 
 func init() {
-	file := fmt.Sprintf("configs/%s.yml", os.Getenv("ENV"))
+	file := fmt.Sprintf("configs/%s.yaml", os.Getenv("ENV"))
 
 	buf, err := ioutil.ReadFile(file)
 	if err != nil {
-		log.Fatalf("load config is failed. error: %s", err.Error())
+		log.Fatalf("load config failed. error: %s", err.Error())
 	}
 
 	if err = yaml.Unmarshal(buf, &Config); err != nil {
-		log.Fatalf("the config file <%s> is not yaml. error: %s", "", err.Error())
+		log.Fatalf("format config file failed. error: %s", err.Error())
 	}
 
 	curPath, _ := os.Getwd()

@@ -1,0 +1,5 @@
+Base:
+  name: "go-example"
+
+Mysql:
+  uri: "go:txgO65Kht@(127.0.0.1:3306)/example?charset=utf8&parseTime=True&loc=Local"
