@@ -22,19 +22,14 @@ type config struct {
 }
 
 func (c *config) Print() {
-	if buf, err := yaml.Marshal(&c); err != nil {
-		log.Println(err.Error())
-	} else {
-		fmt.Println(string(buf))
-	}
+	buf, _ := yaml.Marshal(&c)
+	fmt.Println(string(buf))
 }
 
 var Config *config
 
 func init() {
-	file := fmt.Sprintf("configs/%s.yaml", os.Getenv("ENV"))
-
-	buf, err := ioutil.ReadFile(file)
+	buf, err := ioutil.ReadFile(fmt.Sprintf("configs/%s.yaml", os.Getenv("ENV")))
 	if err != nil {
 		log.Fatalf("load config failed. error: %s", err.Error())
 	}

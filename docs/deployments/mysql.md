@@ -24,7 +24,6 @@ services:
       - /data/docker/mysql_data:/data/mysql_data:rw
     environment:
       MYSQL_ROOT_PASSWORD: "123456"
-      # MYSQL_RANDOM_ROOT_PASSWORD: "yes"
     command:
       - /bin/sh
       - -c
@@ -51,4 +50,4 @@ networks:
     driver: overlay
 ```
 
-> 需要创建配置文件、数据目录。
+> 需要创建配置文件、数据挂载目录。
