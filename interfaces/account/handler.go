@@ -40,12 +40,12 @@ func getAccount() (interface{}, error) {
 }
 
 func newAccount(p *newParams) error {
-	var account entity.Account
-
 	if db, err := mysql.GetConn(); err != nil {
 		log.Println(err.Error())
 		return errors.New(http.StatusText(http.StatusInternalServerError))
 	} else {
+		var account entity.Account
+
 		obj := db.Where("email = ?", p.Email).First(&account)
 
 		switch obj.RecordNotFound() {
