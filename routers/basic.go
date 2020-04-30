@@ -9,6 +9,7 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-example/routers/v1"
 	"net/http"
 	"os"
 	"time"
@@ -33,4 +34,7 @@ func init() {
 	App.GET("/trying", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"code": http.StatusOK, "info": "hello world.", "time": time.Now().Format("2006-01-02 15:04:05")})
 	})
+
+	// 初始化路由
+	v1.Init(App)
 }

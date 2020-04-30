@@ -11,6 +11,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"go-example/models/config"
+	"os"
 )
 
 var db *gorm.DB
@@ -23,6 +24,12 @@ func initDB() (err error) {
 	db.SingularTable(true)
 	db.DB().SetMaxOpenConns(100)
 	db.DB().SetMaxIdleConns(10)
+
+	switch os.Getenv("ENV") {
+	case "prod":
+	default:
+		db = db.Debug()
+	}
 	return
 }
 
