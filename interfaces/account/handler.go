@@ -47,7 +47,7 @@ func getAccount(p *getParams) (interface{}, error) {
 			Where(queryWhere).
 			Order(p.Sort).Offset(p.Offset).Limit(p.PageSize).Scan(&accounts)
 
-		data := map[string]interface{}{"code": count, "list": accounts}
+		data := map[string]interface{}{"count": count, "list": accounts}
 		return data, nil
 	}
 }
