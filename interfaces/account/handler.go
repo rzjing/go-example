@@ -15,6 +15,7 @@ import (
 	"go-example/tools"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func getAccount(p *getParams) (interface{}, error) {
@@ -65,8 +66,10 @@ func newAccount(p *newParams) error {
 			account.Name = p.Name
 			account.Email = p.Email
 			account.Password = tools.MD5Hash(p.Password, false)
-			account.Status = p.Status
 			account.Remark = p.Remark
+
+			status, _ := strconv.Atoi(p.Status)
+			account.Status = int32(status)
 
 			if err = db.Create(&account).Error; err != nil {
 				log.Println(err.Error())
@@ -74,6 +77,56 @@ func newAccount(p *newParams) error {
 			}
 		default:
 			err = errors.New("account already exists")
+		}
+		return err
+	}
+}
+
+func putAccount(id string, p *putParams) error {
+	if db, err := mysql.GetConn(); err != nil {
+		log.Println(err.Error())
+		return errors.New(http.StatusText(http.StatusInternalServerError))
+	} else {
+		var account entity.Account
+
+		obj := db.Where("id = ?", id).First(&account)
+
+		switch obj.RecordNotFound() {
+		case true:
+			err = errors.New("account does not exist")
+		default:
+			account.Name = p.Name
+
+			if p.Password != "" {
+				account.Password = tools.MD5Hash(p.Password, false)
+			}
+
+			status, _ := strconv.Atoi(p.Status)
+			account.Status = int32(status)
+
+			if p.Remark != "" {
+				account.Remark = p.Remark
+			}
+
+			if err = db.Save(&account).Error; err != nil {
+				log.Println(err.Error())
+				err = errors.New("failed to change")
+			}
+		}
+		return err
+	}
+}
+
+func delAccount(id string) error {
+	if db, err := mysql.GetConn(); err != nil {
+		log.Println(err.Error())
+		return errors.New(http.StatusText(http.StatusInternalServerError))
+	} else {
+		idInt32, _ := strconv.Atoi(id)
+		obj := db.Delete(&entity.Account{ID: int32(idInt32)})
+
+		if obj.RowsAffected != 1 {
+			err = errors.New("account does not exist")
 		}
 		return err
 	}
