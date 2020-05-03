@@ -8,10 +8,10 @@
 package interfaces
 
 type Params struct {
-	Page     int
-	PageSize int
-	Offset   int
-	Sort     string
+	Page     int    `json:"page" form:"page"`
+	PageSize int    `json:"page_size" form:"page_size"`
+	Offset   int    `json:"-" form:"-"`
+	Sort     string `json:"sort" form:"sort"`
 }
 
 func (p *Params) Init() {
@@ -19,7 +19,7 @@ func (p *Params) Init() {
 		p.Page = 1
 	}
 
-	if p.PageSize <= 10 {
+	if p.PageSize <= 0 || p.PageSize > 100 {
 		p.PageSize = 10
 	}
 

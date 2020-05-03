@@ -9,6 +9,7 @@ package account
 
 import (
 	"errors"
+	"fmt"
 	"go-example/models/entity"
 	"go-example/models/mysql"
 	"go-example/tools"
@@ -31,10 +32,19 @@ func getAccount(p *getParams) (interface{}, error) {
 			UpdatedAt int    `json:"updated_at"`
 		}
 
-		db.Table("account").
+		var queryWhere string
+		if p.Name != "" {
+			queryWhere = fmt.Sprintf("name like '%s'", "%"+p.Name+"%")
+		} else if p.Email != "" {
+			queryWhere = fmt.Sprintf("email like '%s'", "%"+p.Email+"%")
+		} else {
+			queryWhere = "1 = 1"
+		}
+
+		db.Table("account").Count(&count).
 			Select("id, name, email, status, unix_timestamp(created_at) created_at, unix_timestamp(updated_at) updated_at").
-			Order(p.Sort).Offset(p.Offset).Limit(p.PageSize).
-			Scan(&accounts).Count(&count)
+			Where(queryWhere).
+			Order(p.Sort).Offset(p.Offset).Limit(p.PageSize).Scan(&accounts)
 
 		data := map[string]interface{}{"code": count, "list": accounts}
 		return data, nil

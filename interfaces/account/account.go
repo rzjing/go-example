@@ -14,16 +14,18 @@ import (
 )
 
 type getParams struct {
+	Name  string `json:"name" form:"name"`
+	Email string `json:"email" form:"email"`
 	interfaces.Params
 }
 
-// TODO 分页、排序、搜索
 func GetAccount(ctx *gin.Context) {
 	Code := http.StatusBadRequest
 	CodeError := http.StatusText(Code)
 
 	var p getParams
 
+	_ = ctx.Bind(&p)
 	p.Init()
 
 	if data, err := getAccount(&p); err != nil {
