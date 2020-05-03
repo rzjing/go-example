@@ -11,6 +11,8 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"go-example/models/config"
+	"go-example/models/entity"
+	"go-example/tools"
 	"os"
 )
 
@@ -38,4 +40,21 @@ func GetConn() (conn *gorm.DB, err error) {
 		err = initDB()
 	}
 	return db, err
+}
+
+// 初始化超级账号
+func init() {
+	if _, err := GetConn(); err != nil {
+		panic(err.Error())
+	}
+
+	account := entity.Account{
+		Name:     "Go Example",
+		Email:    "go@example.com",
+		Password: tools.MD5Hash("123456", false),
+	}
+
+	if err := db.FirstOrCreate(&account).Error; err != nil {
+		panic(err.Error())
+	}
 }

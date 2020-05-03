@@ -9,15 +9,24 @@ package account
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-example/interfaces"
 	"net/http"
 )
+
+type getParams struct {
+	interfaces.Params
+}
 
 // TODO 分页、排序、搜索
 func GetAccount(ctx *gin.Context) {
 	Code := http.StatusBadRequest
 	CodeError := http.StatusText(Code)
 
-	if data, err := getAccount(); err != nil {
+	var p getParams
+
+	p.Init()
+
+	if data, err := getAccount(&p); err != nil {
 		CodeError = err.Error()
 	} else {
 		ctx.JSON(http.StatusOK, gin.H{"code": http.StatusOK, "data": data})

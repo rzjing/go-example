@@ -11,11 +11,12 @@ import (
 	"errors"
 	"go-example/models/entity"
 	"go-example/models/mysql"
+	"go-example/tools"
 	"log"
 	"net/http"
 )
 
-func getAccount() (interface{}, error) {
+func getAccount(p *getParams) (interface{}, error) {
 	if db, err := mysql.GetConn(); err != nil {
 		log.Println(err.Error())
 		return nil, errors.New(http.StatusText(http.StatusInternalServerError))
@@ -32,6 +33,7 @@ func getAccount() (interface{}, error) {
 
 		db.Table("account").
 			Select("id, name, email, status, unix_timestamp(created_at) created_at, unix_timestamp(updated_at) updated_at").
+			Order(p.Sort).Offset(p.Offset).Limit(p.PageSize).
 			Scan(&accounts).Count(&count)
 
 		data := map[string]interface{}{"code": count, "list": accounts}
@@ -52,7 +54,7 @@ func newAccount(p *newParams) error {
 		case true:
 			account.Name = p.Name
 			account.Email = p.Email
-			account.Password = p.Password // TODO 加密处理
+			account.Password = tools.MD5Hash(p.Password, false)
 			account.Status = p.Status
 			account.Remark = p.Remark
 
