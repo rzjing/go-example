@@ -7,6 +7,7 @@
 
 * URL `/v1/account/`
 * Method `GET`
+* Header `token: tokenString`
 * Params
 
 |   field    |  type  | required | commit |
@@ -42,6 +43,7 @@
 
 * URL `/v1/account/`
 * Method `POST`
+* Header `token: tokenString`
 * Params
 
 |   field    |  type  | required | commit |
@@ -65,6 +67,7 @@
 
 * URL `/v1/account/:id`
 * Method `PUT`
+* Header `token: tokenString`
 * Params
 
 |   field    |  type  | required | commit |
@@ -87,6 +90,7 @@
 
 * URL `/v1/account/:id`
 * Method `DELETE`
+* Header `token: tokenString`
 * Response
 
 ```json5
