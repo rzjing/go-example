@@ -15,3 +15,13 @@ type base struct {
 type mysql struct {
 	Uri string `yaml:"uri"`
 }
+
+type redis struct {
+	Host        string `yaml:"host"`
+	Port        int    `yaml:"port"`
+	Password    string `yaml:"password"`
+	DB          int    `yaml:"db"`
+	MaxIdle     int    `yaml:"max_idle"`
+	MaxActive   int    `yaml:"max_active"`
+	IdleTimeout int    `yaml:"idle_timeout"`
+}

@@ -19,6 +19,7 @@ import (
 type config struct {
 	Base  base  `yaml:"Base"`
 	Mysql mysql `yaml:"Mysql"`
+	Redis redis `yaml:"Redis"`
 }
 
 func (c *config) Print() {

@@ -3,3 +3,12 @@ Base:
 
 Mysql:
   uri: "go:txgO65Kht@(127.0.0.1:3306)/example?charset=utf8&parseTime=True&loc=Local"
+
+Redis:
+  host: "127.0.0.1"
+  port: 6379
+  password: "123456"
+  db: 10
+  max_idle: 10
+  max_active: 100
+  idle_timeout: 120
