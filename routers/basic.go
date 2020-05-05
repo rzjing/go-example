@@ -10,6 +10,7 @@ package routers
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"go-example/middlewares"
 	"go-example/models/entity"
 	"go-example/models/mysql"
 	"go-example/models/redis"
@@ -34,7 +35,7 @@ func login(p *loginParams) (token string, err error) {
 			err = errors.New("invalid account or password")
 		} else {
 			token = tools.MD5Hash(p.Email+p.Password, false)
-			err = redis.Do("SETEX", redis.DoKey(token), redis.DoValue(account.ID), redis.DoExpire(int(time.Duration(60*60*2))))
+			_, err = redis.Do("SETEX", redis.DoKey(token), redis.DoValue(account.ID), redis.DoExpire(int(time.Duration(60*60*2))))
 		}
 		return token, err
 	}
@@ -87,8 +88,8 @@ func init() {
 
 	App.POST("/login", Login)
 
-	App.POST("/logout", func(ctx *gin.Context) {
-		_ = redis.Do("DEL", redis.DoKey(ctx.GetHeader("token")))
+	App.POST("/logout", middlewares.Validator, func(ctx *gin.Context) {
+		_, _ = redis.Do("DEL", redis.DoKey(ctx.GetHeader("token")))
 		ctx.JSON(http.StatusOK, gin.H{"code": http.StatusOK})
 	})
 

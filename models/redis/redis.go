@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func Do(command string, options ...DoOption) (err error) {
+func Do(command string, options ...DoOption) (reply interface{}, err error) {
 	conn := pool.Get()
 	defer conn.Close()
 
@@ -27,11 +27,15 @@ func Do(command string, options ...DoOption) (err error) {
 
 	switch strings.ToUpper(command) {
 	case "GET":
-		_, err = conn.Do(command, do.key)
+		reply, err = conn.Do(command, do.key)
+	case "EXISTS":
+		reply, err = conn.Do(command, do.key)
 	case "SETEX":
-		_, err = conn.Do(command, do.key, do.expire, do.value)
+		reply, err = conn.Do(command, do.key, do.expire, do.value)
+	case "INCRBY":
+		reply, err = conn.Do(command, do.key, do.value)
 	case "DEL":
-		_, err = conn.Do(command, do.key)
+		reply, err = conn.Do(command, do.key)
 	}
 	return
 }
