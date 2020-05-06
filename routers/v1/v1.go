@@ -16,7 +16,7 @@ import (
 func Init(App *gin.Engine) {
 	v1 := App.Group("/v1")
 
-	accounts := v1.Group("/account", middlewares.Validator, middlewares.FrequencyController)
+	accounts := v1.Group("/account", middlewares.Validator, middlewares.FrequencyControllerByToken)
 	accounts.GET("/", account.GetAccount)
 	accounts.POST("/", account.NewAccount)
 	accounts.PUT("/:id", account.PutAccount)

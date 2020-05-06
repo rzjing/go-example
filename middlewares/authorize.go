@@ -24,8 +24,23 @@ func Validator(ctx *gin.Context) {
 	}
 }
 
-// 访问频率控制 TODO 中间件如何传值 ? 例如: 根据不同接口控制单位时间内请求次数。
-func FrequencyController(ctx *gin.Context) {
+// 访问频率控制 By Client IP
+func FrequencyControllerByIP(ctx *gin.Context) {
+	client := redis.DoKey("FC-" + ctx.ClientIP())
+	reply, _ := redisGo.Int(redis.Do("GET", client))
+	switch reply {
+	case 10:
+		ctx.JSON(http.StatusOK, gin.H{"code": http.StatusTooManyRequests, "error": http.StatusText(http.StatusTooManyRequests)})
+		ctx.Abort()
+	case 0:
+		_, _ = redis.Do("SETEX", client, redis.DoExpire(int(time.Duration(60))), redis.DoValue(1))
+	default:
+		_, _ = redis.Do("INCRBY", client, redis.DoValue(1))
+	}
+}
+
+// 访问频率控制 By Access Token
+func FrequencyControllerByToken(ctx *gin.Context) {
 	token := redis.DoKey("FC-" + ctx.GetHeader("token"))
 	reply, _ := redisGo.Int(redis.Do("GET", token))
 	switch reply {

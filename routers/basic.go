@@ -86,7 +86,7 @@ func init() {
 		ctx.JSON(http.StatusOK, gin.H{"code": http.StatusOK, "info": "hello world.", "time": time.Now().Format("2006-01-02 15:04:05")})
 	})
 
-	App.POST("/login", Login)
+	App.POST("/login", middlewares.FrequencyControllerByIP, Login)
 
 	App.POST("/logout", middlewares.Validator, func(ctx *gin.Context) {
 		_, _ = redis.Do("DEL", redis.DoKey(ctx.GetHeader("token")))
