@@ -8,6 +8,7 @@
 package redis
 
 import (
+	"errors"
 	redisGo "github.com/gomodule/redigo/redis"
 	. "go-example/models/config"
 	"log"
@@ -36,6 +37,8 @@ func Do(command string, options ...DoOption) (reply interface{}, err error) {
 		reply, err = conn.Do(command, do.key, do.value)
 	case "DEL":
 		reply, err = conn.Do(command, do.key)
+	default:
+		err = errors.New("unknown command")
 	}
 	return
 }
