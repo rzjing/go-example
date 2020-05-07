@@ -16,9 +16,11 @@ import (
 func Init(App *gin.Engine) {
 	v1 := App.Group("/v1")
 
-	accounts := v1.Group("/account", middlewares.Validator, middlewares.FrequencyControllerByToken)
-	accounts.GET("/", account.GetAccount)
-	accounts.POST("/", account.NewAccount)
-	accounts.PUT("/:id", account.PutAccount)
-	accounts.DELETE("/:id", account.DelAccount)
+	accountGroup := v1.Group("/account", middlewares.Validator, middlewares.FrequencyControllerByToken)
+	{
+		accountGroup.GET("/", account.GetAccount)
+		accountGroup.POST("/", account.NewAccount)
+		accountGroup.PUT("/:id", account.PutAccount)
+		accountGroup.DELETE("/:id", account.DelAccount)
+	}
 }

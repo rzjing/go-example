@@ -12,17 +12,17 @@ import (
 )
 
 var Scheduler *cron.Cron
-var JobChannel chan int
+var DelChannel chan int
 
 func init() {
 	Scheduler = cron.New()
 	Scheduler.Start()
 
-	JobChannel = make(chan int, 32)
+	DelChannel = make(chan int, 32)
 	go func() {
 		for {
 			select {
-			case id := <-JobChannel:
+			case id := <-DelChannel:
 				Scheduler.Remove(cron.EntryID(id))
 			}
 		}
