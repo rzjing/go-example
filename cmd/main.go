@@ -9,6 +9,7 @@ package main
 
 import (
 	. "go-example/models/config"
+	_ "go-example/models/mongo"
 	"go-example/routers"
 	"log"
 )

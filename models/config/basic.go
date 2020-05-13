@@ -25,3 +25,7 @@ type redis struct {
 	MaxActive   int    `yaml:"max_active"`
 	IdleTimeout int    `yaml:"idle_timeout"`
 }
+
+type mongo struct {
+	Uri string `yaml:"uri"`
+}

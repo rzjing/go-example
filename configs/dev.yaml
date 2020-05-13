@@ -12,3 +12,6 @@ Redis:
   max_idle: 10
   max_active: 100
   idle_timeout: 120
+
+Mongo:
+  uri: "mongodb://localhost:27017"

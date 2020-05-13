@@ -20,6 +20,7 @@ type config struct {
 	Base  base  `yaml:"Base"`
 	Mysql mysql `yaml:"Mysql"`
 	Redis redis `yaml:"Redis"`
+	Mongo mongo `yaml:"Mongo"`
 }
 
 func (c *config) Print() {
