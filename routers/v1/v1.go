@@ -10,6 +10,7 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 	"go-example/interfaces/account"
+	"go-example/interfaces/spider"
 	"go-example/middlewares"
 )
 
@@ -22,5 +23,10 @@ func Init(App *gin.Engine) {
 		accountGroup.POST("/", account.NewAccount)
 		accountGroup.PUT("/:id", account.PutAccount)
 		accountGroup.DELETE("/:id", account.DelAccount)
+	}
+
+	spiderGroup := v1.Group("/spider")
+	{
+		spiderGroup.GET("/douban/", spider.GetDouBan)
 	}
 }
